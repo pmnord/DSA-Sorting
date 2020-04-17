@@ -33,6 +33,7 @@ Write a function qSort that sorts a dataset using the quicksort algorithm. The d
 Write a function mSort that sorts the dataset above using the merge sort algorithm.
 
 <details><summary>Show Solution</summary>
+  
 ```js
 function mSort (array) {
   if (array.length === 1) {
@@ -74,6 +75,7 @@ function merge(left, right){
   return result.concat(left.slice(leftIndex)).concat(right.slice(rightIndex))
 }
 ```
+
 </details>
 
 ## 5. Sorting a linked list using merge sort
