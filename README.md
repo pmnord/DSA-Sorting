@@ -16,18 +16,75 @@ Which two lists would be merged on the 7th merge?
 > [ 1, 21, 26, 45 ] [ 2, 9, 28, 29 ]
 
 ## 2. Understanding quicksort
-1) Suppose you are debugging a quicksort implementation that is supposed to sort an array in ascending order. After the first partition step has been completed, the contents of the array is in the following order: 3 9 1 14 17 24 22 20. Which of the following statements is correct about the partition step? Explain your answer.
+1. Suppose you are debugging a quicksort implementation that is supposed to sort an array in ascending order. After the first partition step has been completed, the contents of the array is in the following order: 3 9 1 14 17 24 22 20. Which of the following statements is correct about the partition step? Explain your answer.
 
-The pivot could have been 17, but could not have been 14
-The pivot could have been either 14 or 17
-Neither 14 nor 17 could have been the pivot
-The pivot could have been 14, but could not have been 17
-2) Given the following list of numbers 14, 17, 13, 15, 19, 10, 3, 16, 9, 12 show the resulting list after the second partitioning according to the quicksort algorithm.
+- The pivot could have been 17, but could not have been 14
+- The pivot could have been either 14 or 17
+- Neither 14 nor 17 could have been the pivot
+- The pivot could have been 14, but could not have been 17
+> Could have been either. If either 14 or 17 were swapped with 20, and then we looked at 14 or 17 starting from the right and iterating over the array to the left, we would end up swapping either 14 or 17 with 20 because the number to the left would have been lower than either 14 or 17. To visualize, here they are swapped: 
+[3, 9, 1, 20, 17, 24, 22, 14]                
+[3, 9, 1, 14, 20, 24, 22, 17]
+Just ask, if I start with the number in the last index in the array and look left, at what point do I see a number that is lower? In both above cases, the point is at the number 20.
 
-When using the last item on the list as a pivot
-When using the first item on the list as a pivot
+2. Given the following list of numbers 14, 17, 13, 15, 19, 10, 3, 16, 9, 12 show the resulting list after the second partitioning according to the quicksort algorithm.
+
+- When using the last item on the list as a pivot
+> [3,  9, 10, 12, 19, 14, 17, 16, 13, 15]
+- When using the first item on the list as a pivot
+> [9,  3, 10, 13, 12, 14, 17, 15, 19, 16]
+
 ## 3. Implementing quicksort
 Write a function qSort that sorts a dataset using the quicksort algorithm. The dataset to sort is: 89 30 25 32 72 70 51 42 25 24 53 55 78 50 13 40 48 32 26 2 14 33 45 72 56 44 21 88 27 68 15 62 93 98 73 28 16 46 87 28 65 38 67 16 85 63 23 69 64 91 9 70 81 27 97 82 6 88 3 7 46 13 11 64 76 31 26 38 28 13 17 69 90 1 6 7 64 43 9 73 80 98 46 27 22 87 49 83 6 39 42 51 54 84 34 53 78 40 14 5.
+
+<details><summary>Show Solution</summary>
+
+```js
+function qSort(array, startingIndex = 0, endingIndex = array.length) {
+  console.log(array)
+  if (startingIndex >= endingIndex) {
+    return array;
+  }
+
+  const middle = partition(array, startingIndex, endingIndex);
+
+  array = qSort(array, startingIndex, middle)
+  array = qSort(array, middle + 1, endingIndex)
+  
+  return array;
+}
+
+function partition(array, start, end) {
+  // Lomuto's Algorithm
+
+  const pivot = array[end - 1];
+  let j = start;
+  for (let i = start; i < end - 1; i++) {
+    if (array[i] <= pivot) {
+      swap(i, j, array);
+      j++;
+    }
+  }
+  swap(end - 1, j, array)
+
+  return j;
+};
+qSort([89, 30, 25, 32, 72, 70, 51, 42, 25, 24, 53, 55, 78, 50, 13, 40, 48, 32, 26, 2, 14, 33, 45, 72, 56, 44, 21, 88, 27, 68, 15, 62, 93, 98, 73, 28, 16, 46, 87, 28, 65, 38, 67, 16, 85, 63, 23, 69, 64, 91, 9, 70, 81, 27, 97, 82, 6, 88, 3, 7, 46, 13, 11, 64, 76, 31, 26, 38, 28, 13, 17, 69, 90, 1, 6, 7, 64, 43, 9, 73, 80, 98, 46, 27, 22, 87, 49, 83, 6, 39, 42, 51, 54, 84, 34, 53, 78, 40, 14, 5])
+
+/* Output: [
+   1,  2,  3,  5,  6,  6,  6,  7,  7,  9,  9, 11,
+  13, 13, 13, 14, 14, 15, 16, 16, 17, 21, 22, 23,
+  24, 25, 25, 26, 26, 27, 27, 27, 28, 28, 28, 30,
+  31, 32, 32, 33, 34, 38, 38, 39, 40, 40, 42, 42,
+  43, 44, 45, 46, 46, 46, 48, 49, 50, 51, 51, 53,
+  53, 54, 55, 56, 62, 63, 64, 64, 64, 65, 67, 68,
+  69, 69, 70, 70, 72, 72, 73, 73, 76, 78, 78, 80,
+  81, 82, 83, 84, 85, 87, 87, 88, 88, 89, 90, 91,
+  93, 97, 98, 98
+] */
+```
+
+</details>
 
 ## 4. Implementing merge sort
 Write a function mSort that sorts the dataset above using the merge sort algorithm.
